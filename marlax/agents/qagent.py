@@ -17,7 +17,7 @@ class QAgent(Agent):
         # default dict with partial that  defaults to 0.0
         self.q_table = {}
 
-    def choose(self, possible_states, epsilon=0.1):
+    def choose(self, possible_states, epsilon=0.1, agent_id = 0):
         """
         Choose an action using an epsilon-greedy policy based on the Q-table.
         
@@ -54,7 +54,6 @@ class QAgent(Agent):
                     best_possible_q_value = best_q_value
             
             return best_possible_action
-            
 
     def update(self, state_key, action, reward, next_state_key, alpha=0.1, gamma=0.99):
         """

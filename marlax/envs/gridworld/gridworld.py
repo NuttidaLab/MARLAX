@@ -98,20 +98,17 @@ class GridWorld(Environment):
         make combinations of possible actions for each agent
         get the possible next positions if the agents would have moved according to the actions
         """
-        grid_max_x, grid_max_y = self.grid[0] - 1, self.grid[1] - 1
-        return [
-            (
-                tuple(
-                    (
-                        max(0, min(agent.position[0] + self.moves[action][0], grid_max_x)),
-                        max(0, min(agent.position[1] + self.moves[action][1], grid_max_y))
-                    )
-                    for agent, action in zip(self.agents, action_comb)
-                ),
-                self.active_reward_target
-            )
-            for action_comb in self.poss_act_combinations
-        ]
+        possible_positions = []
+        for action_comb in self.poss_act_combinations:
+            new_agent_positions = []
+            for idx, action in enumerate(action_comb):
+                agent = self.agents[idx]
+                dx, dy = self.moves.get(action, (0, 0))
+                new_x = max(0, min(self.grid[0] - 1, agent.position[0] + dx))
+                new_y = max(0, min(self.grid[1] - 1, agent.position[1] + dy))
+                new_agent_positions.append((new_x, new_y))
+            possible_positions.append((tuple(new_agent_positions), self.active_reward_target))
+        return possible_positions
         
     def step(self, actions):
         """
@@ -261,3 +258,20 @@ class GridWorld_r3(GridWorld):
             "rl",
             "ud"
         ]
+        
+class GridWorld_r4(GridWorld):
+    def __init__(self, grid, n_agents, target_rewards, together_reward, travel_reward):
+        super().__init__(grid, n_agents, target_rewards, together_reward, travel_reward)
+        self.possibilities = [            
+            "ur",
+            "rd",
+            "dl",
+            "ul",
+            "rl",
+            "ud"
+        ]
+    
+    def get_possible_states(self):
+        # only get the current state and not the entire combination
+        return [self.get_state()]
+        

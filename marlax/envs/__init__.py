@@ -1,1 +1,1 @@
-from marlax.envs.gridworld.gridworld import GridWorld, GridWorld_r0, GridWorld_r1, GridWorld_r2, GridWorld_r3
+from marlax.envs.gridworld.gridworld import *

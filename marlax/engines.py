@@ -17,8 +17,8 @@ class Engine:
             possible_next_states = env.get_possible_states()
             
             actions = []
-            for agent in env.agents:
-                actions.append(agent.choose(possible_next_states, epsilon))
+            for i, agent in enumerate(env.agents):
+                actions.append(agent.choose(possible_next_states, epsilon, agent_id = i))
             
             # Original state.
             state = env.get_state()
@@ -43,8 +43,8 @@ class Engine:
             possible_next_states = env.get_possible_states()
             
             actions = []
-            for agent in env.agents:
-                actions.append(agent.choose(possible_next_states, self.epsilon_test))
+            for i, agent in enumerate(env.agents):
+                actions.append(agent.choose(possible_next_states, self.epsilon_test, agent_id = i))
             
             # Environment processes the actions.
             next_state, rewards, info = env.step(actions)
