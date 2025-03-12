@@ -32,28 +32,41 @@ class QAgent(Agent):
             return random.choice(self.actions)
         else:
             # for all the possible states, get the action with the highest q-value
-            
-            best_possible_action = None
+            best_state = self.get_max_state(possible_states)
             best_possible_q_value = float('-inf')
-            
-            for state_key in possible_states:
-                
-                if state_key not in self.q_table:
-                    self.q_table[state_key] = {a: 0.0 for a in self.actions}
-                
-                best_action = None
-                best_q_value = float('-inf')
+            best_possible_action = None
 
-                for action in self.actions:
-                    if self.q_table[state_key][action] > best_q_value:
-                        best_action = action
-                        best_q_value = self.q_table[state_key][action]
-                
-                if best_q_value > best_possible_q_value:
-                    best_possible_action = best_action
-                    best_possible_q_value = best_q_value
+            for action in self.actions:
+                if self.q_table[best_state][action] > best_possible_q_value:
+                    best_possible_action = action
+                    best_possible_q_value = self.q_table[best_state][action]
             
             return best_possible_action
+        
+    def get_max_state(self, possible_states):
+        best_possible_action = None
+        best_possible_q_value = float('-inf')
+        best_state = None
+        
+        for state_key in possible_states:
+            
+            if state_key not in self.q_table:
+                self.q_table[state_key] = {a: 0.0 for a in self.actions}
+            
+            best_action = None
+            best_q_value = float('-inf')
+
+            for action in self.actions:
+                if self.q_table[state_key][action] > best_q_value:
+                    best_action = action
+                    best_q_value = self.q_table[state_key][action]
+            
+            if best_q_value > best_possible_q_value:
+                best_possible_action = best_action
+                best_possible_q_value = best_q_value
+                best_state = state_key
+        
+        return best_state
 
     def update(self, state_key, action, reward, next_state_key, alpha=0.1, gamma=0.99):
         """

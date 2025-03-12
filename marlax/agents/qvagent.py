@@ -26,8 +26,7 @@ class QValueAgent(Agent):
             return random.choice(self.actions)
         else:
         # print(possible_states)
-            max_state_id = np.argmax([self.q_table[state_key] for state_key in possible_states])
-            max_state = possible_states[max_state_id]
+            max_state = self.get_max_state(possible_states)
             
             current_pos = self.position
             next_pos = max_state[0][agent_id]
@@ -38,9 +37,10 @@ class QValueAgent(Agent):
             action = self.action_map[(dx, dy)]
             return action
     
+    def get_max_state(self, possible_states):
+        max_state_id = np.argmax([self.q_table[state_key] for state_key in possible_states])
+        max_state = possible_states[max_state_id]
+        return max_state
+    
     def update(self, state_key, action, reward, next_state_key, alpha=0.1, gamma=0.99):
-        if state_key not in self.q_table:
-            self.q_table[state_key] = 0.0
-        if next_state_key not in self.q_table:
-            self.q_table[next_state_key] = 0.0
         self.q_table[state_key] = (1 - alpha) * self.q_table[state_key] + alpha * (reward + gamma * self.q_table[next_state_key])
