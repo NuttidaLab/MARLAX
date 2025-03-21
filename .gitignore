@@ -172,3 +172,8 @@ cython_debug/
 
 
 store/*
+store_bk/*
+store_bk_200/*
+
+*.out
+*/cache/*

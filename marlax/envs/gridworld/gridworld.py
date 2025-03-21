@@ -4,7 +4,7 @@ from itertools import product
 import random
 
 class GridWorld(Environment):
-    def __init__(self, grid, agents, target_rewards, together_reward, travel_reward):
+    def __init__(self, grid, agents, target_rewards, together_reward, travel_reward, wrong_zone_penalty = -500):
         """
         Initialize the environment.
         
@@ -20,6 +20,7 @@ class GridWorld(Environment):
         self.target_rewards = target_rewards
         self.together_reward = together_reward
         self.travel_reward = travel_reward
+        self.wrong_zone_penalty = wrong_zone_penalty
         
         # Active reward target managed by the environment.
         # It will be a tuple (like ('lr')) or None if not active.
@@ -148,6 +149,9 @@ class GridWorld(Environment):
         
         # 5. Add travel (energy loss) penalty.
         rewards = [r + self.travel_reward for r in rewards]
+        
+        if reached_wrong_zone:
+            rewards = [r + self.wrong_zone_penalty for r in rewards]
         
         # Update no-reward counter.
         if collected\

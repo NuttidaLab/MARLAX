@@ -13,10 +13,11 @@ class Engine:
             # Linearly decay epsilon.
             epsilon = ((self.epsilon_end - self.epsilon_start) / num_steps) * step + self.epsilon_start
             
+            possible_next_states = env.get_possible_states()
             actions = []
             # Each agent chooses an action based on the next possible states.
             for i, agent in enumerate(env.agents):
-                actions.append(agent.choose(env.get_possible_states(), epsilon, agent_id = i))
+                actions.append(agent.choose(possible_next_states, epsilon, agent_id = i))
             
             # Environment processes the actions.
             state, rewards, info = env.step(actions)
