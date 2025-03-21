@@ -2,6 +2,7 @@
 
 MARLAX is a minimal multi-agent reinforcement learning library built in JAX. It provides Q-learning based agents and a variety of grid-based environments to simplify setting up and experimenting with multi-agent scenarios. With built-in training and logging utilities, MARLAX makes it easy to run and test your MARL experiments.
 
+![joint mice](./landing.gif)
 ---
 
 ### Quick Start
