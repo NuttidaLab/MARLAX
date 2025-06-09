@@ -180,3 +180,5 @@ store_bk_10/*
 */cache/*
 
 notebooks/all_tdf.parquet
+
+bin/*
