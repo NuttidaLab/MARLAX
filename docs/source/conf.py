@@ -16,20 +16,42 @@ release = '0.1.0'
 
 extensions = [
     'sphinx.ext.autodoc',
+    'sphinx.ext.autosummary',
     'sphinx.ext.napoleon',
+    'sphinx.ext.intersphinx',
     'sphinx.ext.viewcode',
-    'sphinx_autodoc_typehints',
+    'sphinx_math_dollar',
+    'sphinx.ext.mathjax',
+    'myst_nb',
+    'myst_parser'
 ]
+
+source_suffix = {
+    '.rst': 'restructuredtext',
+    '.md': 'markdown',
+    '.myst': 'myst-nb',
+    '.ipynb': 'myst-nb',
+ }
 
 templates_path = ['_templates']
 exclude_patterns = []
 
 
+html_theme = 'sphinx_book_theme'
+html_theme_options = {
+    'repository_url': 'https://github.com/NuttidaLab/MARLAX',
+    "use_repository_button": True,
+    "use_download_button": False,
+    'repository_branch': 'main',
+    "path_to_docs": 'docs/source',
+    'launch_buttons': {
+        'colab_url': 'https://colab.research.google.com',
+        'binderhub_url': 'https://mybinder.org'
+    },
+}
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
-
-html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
 
 import os, sys
