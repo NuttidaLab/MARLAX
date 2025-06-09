@@ -26,13 +26,6 @@ extensions = [
     'myst_parser'
 ]
 
-source_suffix = {
-    '.rst': 'restructuredtext',
-    '.md': 'markdown',
-    '.myst': 'myst-nb',
-    '.ipynb': 'myst-nb',
- }
-
 templates_path = ['_templates']
 exclude_patterns = []
 
