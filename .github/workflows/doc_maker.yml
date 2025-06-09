@@ -7,14 +7,19 @@ on:
 
 permissions:
   contents: read
-  pages: write
+  pages:   write
   id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repository
+      - name: Checkout repo
         uses: actions/checkout@v4
 
       - name: Setup Python 3.12
@@ -30,16 +35,15 @@ jobs:
 
       - name: Build Sphinx docs
         working-directory: docs
-        run: |
-          make html
+        run: make html
 
-      - name: Configure GitHub Pages
-        uses: actions/configure-pages@v3
-
+      # ← Here’s the change: bump to the v3 pages-artifact action
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v1
+        id: upload-pages
+        uses: actions/upload-pages-artifact@v3
         with:
           path: docs/build/html
 
+      # ← And deploy-pages should be v4
       - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v4
