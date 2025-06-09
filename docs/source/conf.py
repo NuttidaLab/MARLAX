@@ -23,8 +23,13 @@ extensions = [
     'sphinx_math_dollar',
     'sphinx.ext.mathjax',
     'myst_nb',
-    'myst_parser'
 ]
+
+source_suffix = {
+    '.rst':  'restructuredtext',
+    '.md':   'myst-nb',
+    '.ipynb':'myst-nb',
+}
 
 templates_path = ['_templates']
 exclude_patterns = []
