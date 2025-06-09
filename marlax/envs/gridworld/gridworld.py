@@ -4,7 +4,7 @@ from itertools import product
 import random
 
 class GridWorld(Environment):
-    def __init__(self, grid, agents, target_rewards, together_reward, travel_reward, wrong_zone_penalty = -500):
+    def __init__(self, grid, agents, target_rewards, together_reward, travel_reward, wrong_zone_penalty = -500, mismatch_penalty = -250):
         """
         Initialize the environment.
         
@@ -21,6 +21,7 @@ class GridWorld(Environment):
         self.together_reward = together_reward
         self.travel_reward = travel_reward
         self.wrong_zone_penalty = wrong_zone_penalty
+        self.mismatch_penalty = mismatch_penalty
         
         # Active reward target managed by the environment.
         # It will be a tuple (like ('lr')) or None if not active.
@@ -143,6 +144,8 @@ class GridWorld(Environment):
         
         reached_wrong_zone = self.check_wrong_reward_zones()
         
+        went_to_mismatched = self.check_mismatch()
+        
         # 4. Add together bonus if all agents are at the same position.
         if len(set(agent.position for agent in self.agents)) == 1:
             rewards = [r + self.together_reward for r in rewards]
@@ -152,6 +155,9 @@ class GridWorld(Environment):
         
         if reached_wrong_zone:
             rewards = [r + self.wrong_zone_penalty for r in rewards]
+        
+        if went_to_mismatched:
+            rewards = [r + self.mismatch_penalty for r in rewards]
         
         # Update no-reward counter.
         if collected\
@@ -212,6 +218,13 @@ class GridWorld(Environment):
                     collected = True
                     break
         return collected, rewards
+    
+    def check_mismatch(self):
+        if self.active_reward_target:
+            coords = self.reward_place_to_coord.get(self.active_reward_target, None)
+            if any(agent.position == coords[0] for agent in self.agents) and any(agent.position == coords[1] for agent in self.agents):
+                return True
+        return False
     
     def check_wrong_reward_zones(self):
         """

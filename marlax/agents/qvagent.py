@@ -33,7 +33,6 @@ class QValueAgent(Agent):
             
             dx = next_pos[0] - current_pos[0]
             dy = next_pos[1] - current_pos[1]
-            # print("was here ", current_pos, "went here", next_pos, "dx, dy", dx, dy)
             action = self.action_map[(dx, dy)]
             return action
     
