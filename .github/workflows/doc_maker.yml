@@ -1,0 +1,49 @@
+name: Build & Deploy Docs
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages:   write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python 3.12
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -e .
+          pip install sphinx sphinx-book-theme sphinx-autodoc-typehints myst-nb sphinx_math_dollar
+
+      - name: Build Sphinx docs
+        working-directory: docs
+        run: make html
+
+      # ← Here’s the change: bump to the v3 pages-artifact action
+      - name: Upload Pages artifact
+        id: upload-pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/build/html
+
+      # ← And deploy-pages should be v4
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
