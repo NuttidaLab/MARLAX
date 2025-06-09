@@ -2,7 +2,8 @@
    sphinx-quickstart on Mon Jun  9 11:43:35 2025.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
-
+Welcome to MARLAX! 
+======
 
 .. image:: https://github.com/NuttidaLab/MARLAX/actions/workflows/doc_maker.yml/badge.svg
    :target: https://github.com/NuttidaLab/MARLAX/actions/workflows/doc_maker.yml
@@ -14,8 +15,6 @@
    :target: https://nuttidalab.github.io/MARLAX/index.html
 .. image:: https://img.shields.io/badge/python-3.12-blue.svg
 
-Welcome to MARLAX! 
-======
 
 Minimal, JAX-powered multi-agent reinforcement learning.
 
@@ -110,15 +109,22 @@ MARLAX is released under the MIT License. See ``LICENSE`` for details.
 
 .. toctree::
    :maxdepth: 1
-   :caption: Tutorials:
+   :caption: 🚀 Tutorials:
 
    quickstart
 
 .. toctree::
-   :maxdepth: 2
-   :caption: API Reference:
+   :maxdepth: 1
+   :caption: 📚 API Documentation:
 
-   modules
+   api/index
+
+
+.. toctree::
+   :maxdepth: 4
+   :caption: 📖 Full API Reference:
+
+   api/modules
 
 Indices and tables
 ==================

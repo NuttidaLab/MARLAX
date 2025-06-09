@@ -1,3 +1,9 @@
+"""
+Tracer for logging environment and agent data in MARLAX.
+
+Handles buffering of frame-wise metrics and exports to Parquet files,
+plus serialization of agent Q-tables.
+"""
 import shutil
 import os
 import pyarrow as pa
@@ -6,6 +12,18 @@ import pandas as pd
 import pickle
 
 class Tracer:
+    """
+    Records and manages simulation logs and agent exports.
+
+    Attributes:
+        log_path (str): Base directory for log storage.
+        logger_active (bool): Flag indicating logging activity.
+        log_buffer (list): Buffered rows awaiting flush.
+        flush_every (int): Number of frames before auto-flush.
+        regime_idx (int): Identifier for current regime.
+        log_filename (str): Path to the active Parquet file.
+        parquet_writer (pq.ParquetWriter): Writer for Parquet output.
+    """
     
     def __init__(self, log_path):
         """
@@ -27,24 +45,6 @@ class Tracer:
         # Remove folder if it exists
         if os.path.exists(self.log_path):
             shutil.rmtree(self.log_path)
-    
-    def _init_logger(self, flush_every, regime_idx, who="training"):
-        """
-        Initialize the logger that appends rows to an HDF5 file.
-        
-        Args:
-            flush_every (int): Number of frames to buffer before writing to disk.
-            regime_idx (int): Regime identifier that is recorded with each row.
-        """
-        # Ensure the log path exists.
-        os.makedirs(self.log_path+"/logs", exist_ok=True)
-        # Build the full log filename using the provided log_path.
-        self.log_filename = os.path.join(self.log_path+"/logs", f"{who}_{regime_idx}.h5")
-        self.flush_every = flush_every
-        self.regime_idx = regime_idx
-        self.log_buffer = []
-        self.log_store = pd.HDFStore(self.log_filename, mode='a')
-        self.logger_active = True
         
     def _init_logger(self, flush_every, regime_idx, who="training"):
         """
@@ -66,7 +66,11 @@ class Tracer:
         self.logger_active = True
     
     def _flush_buffer(self):
-        """Flush the log buffer to the Parquet file using PyArrow."""
+        """
+        Write buffered log rows to the Parquet file.
+
+        Uses PyArrow to append table chunks.
+        """
         if not self.log_buffer:
             return
         
@@ -84,8 +88,13 @@ class Tracer:
     
     def _log_frame(self, step, next_state, rewards, info):
         """
-        Build a row from the current frame data and add it to the log buffer.
-        Flush to disk when the buffer size reaches flush_every.
+        Buffer a new frame record and auto-flush if needed.
+
+        Args:
+            step (int): Frame index.
+            next_state (tuple): (agent_positions, reward_loc).
+            rewards (list[float]): Reward values per agent.
+            info (dict): Diagnostic info, expects keys 'activated', 'collected', 'terminated', 'steps_without_reward'.
         """
         # Expect next_state to be a tuple: (agent_states, reward_loc)
         agent_states, reward_loc = next_state
@@ -123,7 +132,10 @@ class Tracer:
             
     def export_agents(self, env):
         """
-        Export agents to a file.
+        Serialize each agent's Q-table to individual pickle files.
+
+        Args:
+            env (Environment): Environment whose agents will be dumped.
         """
         os.makedirs(self.log_path+"/qvals", exist_ok=True)
         for idx, agent in enumerate(env.agents):
@@ -133,7 +145,13 @@ class Tracer:
     
     def import_agents(self, agent):
         """
-        Import agents from a file.
+        Load agent Q-tables from pickle files and reinstantiate agents.
+
+        Args:
+            agent_cls (callable): Constructor for the agent class to create instances.
+
+        Returns:
+            list: Agent instances with loaded Q-tables.
         """
         all_agents = []
         

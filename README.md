@@ -1,10 +1,10 @@
 # MARLAX
 
+[![Build Status](https://github.com/NuttidaLab/MARLAX/actions/workflows/doc_maker.yml/badge.svg)](https://github.com/NuttidaLab/MARLAX/actions/workflows/doc_maker.yml)
+[![License](https://img.shields.io/github/license/NuttidaLab/MARLAX)](LICENSE)
 [![Documentation](https://img.shields.io/badge/Complete-documentation-blue.svg)](https://nuttidalab.github.io/MARLAX/index.html) 
 [![Documentation](https://img.shields.io/badge/api-reference-blue.svg)](https://nuttidalab.github.io/MARLAX/index.html) 
-[![Build Status](https://github.com/NuttidaLab/MARLAX/actions/workflows/doc_maker.yml/badge.svg)](https://github.com/NuttidaLab/MARLAX/actions/workflows/doc_maker.yml)
 ![Documentation](https://img.shields.io/badge/python-3.7_|_3.8_|_3.9_|_3.10-blue.svg)
-[![License](https://img.shields.io/github/license/NuttidaLab/MARLAX)](LICENSE)
 
 Minimal, JAX-powered multi-agent reinforcement learning.
 

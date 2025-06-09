@@ -16,14 +16,18 @@ release = '0.1.0'
 
 extensions = [
     'sphinx.ext.autodoc',
-    'sphinx.ext.autosummary',
     'sphinx.ext.napoleon',
+    'sphinx.ext.autosummary',
     'sphinx.ext.intersphinx',
     'sphinx.ext.viewcode',
     'sphinx_math_dollar',
     'sphinx.ext.mathjax',
     'myst_nb',
 ]
+
+autosummary_generate = True
+napoleon_google_docstring = True
+napoleon_numpy_docstring  = False
 
 source_suffix = {
     '.rst':  'restructuredtext',

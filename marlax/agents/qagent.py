@@ -1,15 +1,30 @@
+"""
+QAgent implementation using Q-learning for MARLAX.
+
+This agent maintains a Q-table mapping global states to action values
+and selects actions via an epsilon-greedy strategy.
+"""
+
 from marlax.abstracts import Agent
 
 import random
 
 class QAgent(Agent):
+    """
+    Q-learning agent that chooses actions based on a Q-table.
+
+    Attributes:
+        position (tuple): Agent's (x, y) position on the grid.
+        actions (list): List of possible actions.
+        q_table (dict): Maps state_key to a dict of action->value.
+    """
     def __init__(self, init_position = None, actions = ['stay', 'up', 'down', 'left', 'right']):
         """
-        Initialize an agent with a starting position and possible action set.
-        
+        Initialize an agent with a starting position and possible actions.
+
         Args:
-            init_position (tuple): The (x, y) starting coordinates.
-            actions (list): List of possible actions (e.g., ['stay', 'up','down','left','right']).
+            init_position (tuple, optional): The (x, y) starting coordinates. Defaults to None.
+            actions (list of str, optional): Available actions. Defaults to ['stay', 'up', 'down', 'left', 'right'].
         """
         self.position = init_position  # Agent's (x, y) position on the grid.
         self.actions = actions # List of possible actions.
@@ -19,14 +34,15 @@ class QAgent(Agent):
 
     def choose(self, possible_states, epsilon=0.1, agent_id = 0):
         """
-        Choose an action using an epsilon-greedy policy based on the Q-table.
-        
+        Select an action using an epsilon-greedy policy.
+
         Args:
-            state_key: The key representing the current global state.
-            epsilon (float): Exploration rate.
-            
+            possible_states (list): List of global state keys to evaluate.
+            epsilon (float): Exploration probability. Defaults to 0.1.
+            agent_id (int): Identifier for this agent among multiple agents. Defaults to 0.
+
         Returns:
-            action (str): Chosen action.
+            str: The chosen action.
         """
         if random.random() < epsilon:
             return random.choice(self.actions)
@@ -44,6 +60,17 @@ class QAgent(Agent):
             return best_possible_action
         
     def get_max_state(self, possible_states):
+        """
+        Identify the state with the highest max Q-value.
+
+        This helper initializes missing table entries to zero.
+
+        Args:
+            possible_states (list): List of global state keys.
+
+        Returns:
+            any: The state_key with the highest action value.
+        """
         best_possible_action = None
         best_possible_q_value = float('-inf')
         best_state = None
@@ -70,17 +97,18 @@ class QAgent(Agent):
 
     def update(self, state_key, action, reward, next_state_key, alpha=0.1, gamma=0.99):
         """
-        Update Q-value for the given state and action using the Q-learning update rule.
-        
-        $$Q(s, a) = Q(s, a) + \alpha * (r + \gamma * \max_a Q(s', a) - Q(s, a))$$
-        
+        Update the Q-table entry for a given state and action.
+
+        Applies the Q-learning update rule:
+        $$Q(s,a) = Q(s,a) + alpha * (r + gamma * max_a Q(s',a) - Q(s,a))$$.
+
         Args:
-            state_key: Current global state key.
-            action (str): Action taken.
-            reward (float): Immediate reward received.
-            next_state_key: Next global state key.
-            alpha (float): Learning rate.
-            gamma (float): Discount factor.
+            state_key (any): Current global state key.
+            action (str): Action taken by the agent.
+            reward (float): Reward received after action.
+            next_state_key (any): Next global state key.
+            alpha (float): Learning rate. Defaults to 0.1.
+            gamma (float): Discount factor. Defaults to 0.99.
         """
         if state_key not in self.q_table:
             self.q_table[state_key] = {a: 0.0 for a in self.actions}

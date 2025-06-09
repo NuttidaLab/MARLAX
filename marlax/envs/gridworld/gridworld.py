@@ -1,19 +1,46 @@
-from marlax.abstracts import Environment
+"""
+GridWorld environments for MARLAX.
 
+Defines a configurable multi-agent grid world with reward targets, penalties,
+travel costs, and various reward regimes (r0–r4).
+"""
+from marlax.abstracts import Environment
 from itertools import product
 import random
 
 class GridWorld(Environment):
+    """
+    Multi-agent grid environment with dynamic reward activation and penalties.
+
+    Attributes:
+        grid (tuple[int, int]): Dimensions (width, height) of the grid.
+        agents (list[Agent]): Agent instances operating in the grid.
+        target_rewards (list[float]): Reward for each agent upon correct target.
+        together_reward (float): Bonus for agents co-located.
+        travel_reward (float): Penalty (cost) for each move.
+        wrong_zone_penalty (float): Penalty for entering a wrong reward zone.
+        mismatch_penalty (float): Penalty if agents split between correct zones.
+        possibilities (list[str]): Possible reward configurations.
+        center_pos (tuple[int,int]): Coordinates of grid center.
+        reward_place_to_coord (dict[str, tuple[tuple[int,int], ...]]): Maps target IDs to coordinates.
+        moves (dict[str, tuple[int,int]]): Maps action names to (dx,dy) offsets.
+        poss_act_combinations (list[tuple[str,...]]): All action combos per agent.
+        steps_without_reward (int): Counter for steps without reward.
+        no_reward_threshold (int): Steps limit before forced reset.
+    """
+    
     def __init__(self, grid, agents, target_rewards, together_reward, travel_reward, wrong_zone_penalty = -500, mismatch_penalty = -250):
         """
-        Initialize the environment.
-        
+        Initialize the grid world parameters and agents.
+
         Args:
-            grid (tuple): (width, height) of the grid.
-            n_agents (int): Number of agents in the environment.
-            target_rewards (list): List of target rewards for each agent (e.g., [10, 10] for two agents).
-            together_reward (float): Bonus reward if agents are at the same position.
-            travel_reward (float): Penalty (energy cost) for each move.
+            grid (tuple[int,int]): Grid dimensions as (width, height).
+            agents (list[Agent]): Agent instances present in the environment.
+            target_rewards (list[float]): Reward values per agent for correct target.
+            together_reward (float): Bonus reward if all agents share a cell.
+            travel_reward (float): Cost (negative reward) per move.
+            wrong_zone_penalty (float, optional): Penalty for entering a wrong zone. Defaults to -500.
+            mismatch_penalty (float, optional): Penalty if agents split between two target zones. Defaults to -250.
         """
         self.grid = grid
         self.agents = agents # List of Agent instances.
@@ -61,9 +88,10 @@ class GridWorld(Environment):
 
     def get_state(self):
         """
-        Return the combined global state:
-            - Tuple of all agent positions.
-            - The current active reward target.
+        Get the current global state representation.
+
+        Returns:
+            tuple: ((agent_positions), active_reward_target)
         """
         agent_positions = tuple(agent.position for agent in self.agents)
         # Use None if no active reward target.
@@ -71,8 +99,9 @@ class GridWorld(Environment):
 
     def reset(self):
         """
-        Reset agent positions randomly within the grid.
-        Also clear the active reward target.
+        Randomly reposition agents and clear active rewards.
+
+        Sets each agent to a random cell and chooses a new true_reward_target.
         """
         for agent in self.agents:
             agent.position = (random.randint(0, self.grid[0]-1),
@@ -82,10 +111,10 @@ class GridWorld(Environment):
 
     def move_agents(self, actions):
         """
-        Update each agent's position based on the given action.
-        
+        Update agent positions based on provided actions.
+
         Args:
-            actions (list): List of actions (one per agent).
+            actions (list[str]): Actions for each agent.
         """
 
         for idx, action in enumerate(actions):
@@ -97,8 +126,10 @@ class GridWorld(Environment):
 
     def get_possible_states(self):
         """
-        make combinations of possible actions for each agent
-        get the possible next positions if the agents would have moved according to the actions
+        Compute all possible next global states from current positions.
+
+        Returns:
+            list[tuple]: List of (positions, active_reward_target) for each action combo.
         """
         possible_positions = []
         for action_comb in self.poss_act_combinations:
@@ -121,12 +152,15 @@ class GridWorld(Environment):
           4. Apply travel penalty and together bonus.
           5. Reset if no reward is collected for too long.
         
+
         Args:
-            actions (list): List of actions, one per agent.
-            
+            actions (list[str]): Action for each agent.
+
         Returns:
-            observations (list): Each agent's observed global state.
-            rewards (list): Reward for each agent.
+            tuple: (next_state, rewards, info)
+                next_state (tuple): New global state.
+                rewards (list[float]): Reward per agent.
+                info (dict): Diagnostics including activation and termination flags.
         """
         # Trail termination tracker
         terminated = False
@@ -192,6 +226,9 @@ class GridWorld(Environment):
         Check if any agent is at the center and no reward target is active.
         If so, activate the reward target.
         This method is meant to be overridden by regime-specific environments.
+        
+        Returns:
+            bool: True if activation occurred.
         """
         if self.active_reward_target is None:
             for agent in self.agents:
@@ -204,9 +241,13 @@ class GridWorld(Environment):
         """
         Compute rewards based on agent positions and active reward target.
         Modify the rewards list in place.
+        
+        Args:
+            rewards (list[float]): Current rewards (modified in place).
+
         Returns:
-            collected (bool): True if the reward has been collected.
-        This method is meant to be overridden by regime-specific environments.
+            tuple: (collected, rewards_list)
+                collected (bool): True if any reward was collected.
         """
         collected = False
         if self.active_reward_target:
@@ -220,6 +261,12 @@ class GridWorld(Environment):
         return collected, rewards
     
     def check_mismatch(self):
+        """
+        Detect if agents split between two correct target zones.
+
+        Returns:
+            bool: True if agents occupy both target cells.
+        """
         if self.active_reward_target:
             coords = self.reward_place_to_coord.get(self.active_reward_target, None)
             if any(agent.position == coords[0] for agent in self.agents) and any(agent.position == coords[1] for agent in self.agents):
@@ -228,8 +275,10 @@ class GridWorld(Environment):
     
     def check_wrong_reward_zones(self):
         """
-        Check if any agent is at the wrong reward zone.
-        If so, end trial. no reward.
+        Check if any agent enters a non-target reward zone.
+
+        Returns:
+            bool: True if a wrong-zone entry occurred.
         """
         if self.active_reward_target is not None:
             wrong_zones = {'u','r','d','l'} - set(self.active_reward_target)
@@ -241,12 +290,24 @@ class GridWorld(Environment):
         return False
     
 class GridWorld_r0(GridWorld):
+    """
+    Regime 0: Single-step reward at center regardless of target labels.
+    """
     def __init__(self, grid, n_agents, target_rewards, together_reward, travel_reward):
+        """
+        Initialize regime-0 grid world (center-only reward).
+        """
         super().__init__(grid, n_agents, target_rewards, together_reward, travel_reward)
         # Fixed reward target for regime 0.
         self.possibilities = [None]
         
     def compute_rewards(self, rewards):
+        """
+        Reward when any agent reaches the center cell.
+
+        Returns:
+            tuple: (collected, rewards)
+        """
         collected = False
         if any(agent.position == self.center_pos for agent in self.agents):
             for i in range(len(rewards)):
@@ -255,16 +316,25 @@ class GridWorld_r0(GridWorld):
         return collected, rewards
 
 class GridWorld_r1(GridWorld):
+    """
+    Regime 1: Single target 'rl' activated after center.
+    """
     def __init__(self, grid, n_agents, target_rewards, together_reward, travel_reward):
         super().__init__(grid, n_agents, target_rewards, together_reward, travel_reward)
         self.possibilities = ["rl"]
 
 class GridWorld_r2(GridWorld):
+    """
+    Regime 2: Single target 'ud' activated after center.
+    """
     def __init__(self, grid, n_agents, target_rewards, together_reward, travel_reward):
         super().__init__(grid, n_agents, target_rewards, together_reward, travel_reward)
         self.possibilities = ["ud"]
 
 class GridWorld_r3(GridWorld):
+    """
+    Regime 3: Multiple directional targets after center.
+    """
     def __init__(self, grid, n_agents, target_rewards, together_reward, travel_reward):
         super().__init__(grid, n_agents, target_rewards, together_reward, travel_reward)
         self.possibilities = [
@@ -277,6 +347,9 @@ class GridWorld_r3(GridWorld):
         ]
         
 class GridWorld_r4(GridWorld):
+    """
+    Regime 4: Same as r3 but only returns current state.
+    """
     def __init__(self, grid, n_agents, target_rewards, together_reward, travel_reward):
         super().__init__(grid, n_agents, target_rewards, together_reward, travel_reward)
         self.possibilities = [            
@@ -289,6 +362,11 @@ class GridWorld_r4(GridWorld):
         ]
     
     def get_possible_states(self):
-        # only get the current state and not the entire combination
+        """
+        Override to return only current state (no branch expansion).
+
+        Returns:
+            list[tuple]: Single-element list containing current state.
+        """
         return [self.get_state()]
         
