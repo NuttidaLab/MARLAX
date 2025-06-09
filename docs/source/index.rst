@@ -117,14 +117,11 @@ MARLAX is released under the MIT License. See ``LICENSE`` for details.
    :maxdepth: 1
    :caption: 📚 API Documentation:
 
-   api/index
-
-
-.. toctree::
-   :maxdepth: 4
-   :caption: 📖 Full API Reference:
-
-   api/modules
+   api/agents
+   api/envs
+   api/engines
+   api/tracers
+   api/utils
 
 Indices and tables
 ==================
