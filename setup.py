@@ -5,6 +5,11 @@ from pathlib import Path
 here = Path(__file__).parent
 long_description = (here / "README.md").read_text(encoding="utf-8")
 
+def load_requirements(fname):
+    with open(fname) as f:
+        return [line.strip() for line in f
+                if line.strip() and not line.startswith("#")]
+
 setup(
     name="marlax",  # lowercase is recommended on PyPI
     version="0.1.0",
@@ -13,26 +18,10 @@ setup(
     description="Minimal multi-agent reinforcement learning library powered by JAX",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    packages=find_packages(exclude=["analysis", "analysis.*", "tests", "docs"]),
+    packages=find_packages(exclude=["analysis", "analysis.*", "tests", "docs", "notebooks"]),
     python_requires=">=3.12",
-    install_requires=[
-        "tqdm>=4.65.0",   # progress bars used by Engine
-        "pyarrow",
-    ],
-    extras_require={
-        "docs": [
-            "sphinx",
-            "sphinx-book-theme",
-            "sphinx-autodoc-typehints",
-            "myst-nb",
-            "sphinx-math-dollar",
-        ],
-        "dev": [
-            "pytest",
-            "flake8",
-            "black",
-        ],
-    },
+    install_requires=load_requirements("requirements.txt"),
+    extras_require={},
     include_package_data=True,
     classifiers=[
         "Programming Language :: Python :: 3",
