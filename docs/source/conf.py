@@ -22,12 +22,13 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinx_math_dollar',
     'sphinx.ext.mathjax',
+    'myst_parser',
     'myst_nb',
 ]
 
 source_suffix = {
     '.rst':  'restructuredtext',
-    '.md':   'myst-nb',
+    '.md':   'markdown',
     '.ipynb':'myst-nb',
 }
 
