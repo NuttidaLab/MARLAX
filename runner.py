@@ -1,12 +1,9 @@
-# %%
 from marlax.agents import QAgent, QValueAgent
 from marlax.envs import GridWorld_r0, GridWorld_r3, GridWorld_r4
 from marlax import Engine, Tracer
 
-# %%
 from joblib import Parallel, delayed
 
-# %%
 def train_and_test( seed=42, 
                     n_agents=2,
                     grid_size=(11,11),
@@ -40,7 +37,6 @@ def train_and_test( seed=42,
         trainer.test(environment, tracer, num_steps=10_000_00, regime_idx=i)
     tracer.export_agents(environment)
 
-# %%
 if __name__ == '__main__':
     seeds = list(range(100))
     results = Parallel(n_jobs=-1)(delayed(train_and_test)(seed=s) for s in seeds)

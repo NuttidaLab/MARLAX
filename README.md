@@ -8,6 +8,18 @@ MARLAX is a minimal multi-agent reinforcement learning library built in JAX. It 
 
 ### Quick Start
 
+```bash
+git clone https://github.com/NuttidaLab/MARLAX.git
+cd MARLAX
+
+conda env create -f environment.yml
+conda activate marlax
+
+pip install --editable .
+```
+
+### Example Usage
+
 ```python
 from marlax.agents import QAgent
 from marlax.envs import GridWorld_r0, GridWorld_r3
