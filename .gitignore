@@ -178,3 +178,5 @@ store_bk_10/*
 
 *.out
 */cache/*
+
+notebooks/all_tdf.parquet
