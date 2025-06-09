@@ -17,6 +17,7 @@ setup(
     python_requires=">=3.12",
     install_requires=[
         "tqdm>=4.65.0",   # progress bars used by Engine
+        "pyarrow",
     ],
     extras_require={
         "docs": [
