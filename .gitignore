@@ -170,6 +170,22 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 
+# Python artifacts
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.egg
+
+# Environment
+.env
+.venv/
+env/ 
+*.yml 
+*.lock
+
+# Notebook checkpoints
+.ipynb_checkpoints/
+
 
 store/*
 store_bk/*

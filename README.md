@@ -1,54 +1,95 @@
 # MARLAX
 
-![joint mice](./landing.gif)
+[![Build Status](https://github.com/NuttidaLab/MARLAX/actions/workflows/ci.yml/badge.svg)](https://github.com/NuttidaLab/MARLAX/actions/workflows/ci.yml)
+[![PyPI version](https://img.shields.io/pypi/v/marlax)](https://pypi.org/project/marlax)
+[![License](https://img.shields.io/github/license/NuttidaLab/MARLAX)](LICENSE)
 
-MARLAX is a minimal multi-agent reinforcement learning library built in JAX. It provides Q-learning based agents and a variety of grid-based environments to simplify setting up and experimenting with multi-agent scenarios. With built-in training and logging utilities, MARLAX makes it easy to run and test your MARL experiments.
+Minimal, JAX-powered multi-agent reinforcement learning.
+
+**MARLAX** provides:
+- **Q-learning** agents (single- and multi-agent setups)  
+- A suite of **grid-based environments**  
+- Built-in **Engine** for train/test loops  
+- **Tracer** utilities for logging, checkpointing, and exporting agents  
 
 ---
 
-### Quick Start
+![joint mice](./landing.gif)
+
+---
+
+### 📦 Installation
 
 ```bash
+# Clone the repo
 git clone https://github.com/NuttidaLab/MARLAX.git
 cd MARLAX
 
+# Create your conda environment
 conda env create -f environment.yml
 conda activate marlax
 
+# Install in editable mode
 pip install --editable .
 ```
+Alternatively, install via PyPI (coming soon!):
 
-### Example Usage
+```bash
+pip install marlax
+```
+---
+
+### 🎉 Quick Start
 
 ```python
 from marlax.agents import QAgent
 from marlax.envs import GridWorld_r0, GridWorld_r3
 from marlax import Engine, Tracer
 
-# Step 1: Set the random seed (if needed)
-# random.seed(seed)
-
-# Step 2: Create agents and define target rewards
-target_rewards = [target_reward] * n_agents
+# 1. Initialize agents & rewards
+n_agents = 5
 agents = [QAgent() for _ in range(n_agents)]
+target_rewards = [1.0] * n_agents
 
-# Step 3: Choose environments and training steps
-environments = [GridWorld_r0, GridWorld_r3]
-nsteps = [1_000_000, 1_000_000]
+# 2. Set up environments and regimes
+env_classes = [GridWorld_r0, GridWorld_r3]
+regime_steps = [1_000_000, 1_000_000]
 
-# Step 4: Initialize the tracer (for logging) and the engine (trainer)
-tracer = Tracer(f"store/{seed}")
-trainer = Engine(epsilon_start, epsilon_end, epsilon_test=0.0)
+# 3. Create tracer and engine
+tracer = Tracer("store/experiment1")
+trainer = Engine(epsilon_start=1.0, epsilon_end=0.1, epsilon_test=0.0)
 
-# Step 5: For each environment, train and then test the agents
-for (i, EnvClass), steps in zip(enumerate(environments), nsteps):
-    # Instantiate the environment for the current regime
-    environment = EnvClass(grid_size, agents, target_rewards, together_reward, travel_reward)
-    # Train the agents
-    trainer.train(environment, tracer, num_steps=steps, alpha=alpha, gamma=gamma, regime_idx=i)
-    # Test the agents
-    trainer.test(environment, tracer, num_steps=100, regime_idx=i)
+# 4. Train & test
+grid_size = 5
+for idx, (Env, steps) in enumerate(zip(env_classes, regime_steps)):
+    env = Env(grid_size, agents, target_rewards, together_reward=0.1, travel_reward=-0.01)
+    trainer.train(env, tracer, num_steps=steps, alpha=0.5, gamma=0.99, regime_idx=idx)
+    trainer.test(env, tracer, num_steps=100, regime_idx=idx)
 
-# Step 6: Export the trained agents for later use
-tracer.export_agents(environment)
+# 5. Export trained policies
+tracer.export_agents(env)
 ```
+---
+### 🧑‍🏫 Documentation
+For detailed documentation, please visit our [Documentation Site](https://marlax.readthedocs.io).
+---
+### 🤝 Contributing
+
+Contributions are welcome! Please:
+
+1. Fork the project and create a feature branch.
+1. Write tests for new functionality.
+1. Ensure linters and formatters (black, flake8) pass (pre-commit hooks available).
+1. Submit a pull request describing your changes.
+---
+### 📖 Citation
+
+If you use MARLAX in your research, please cite:
+
+```
+@misc{(coming_soon)}
+```
+---
+### 📝 License
+
+MARLAX is released under the MIT License. See `LICENSE` for details.
