@@ -1,4 +1,5 @@
 # MARLAX
+
 [![Documentation](https://img.shields.io/badge/Complete-documentation-blue.svg)](https://rgs2151.github.io/NeuralJAXwork/) 
 [![Documentation](https://img.shields.io/badge/api-reference-blue.svg)](https://rgs2151.github.io/NeuralJAXwork/_autosummary/NeuralJAXwork.html) 
 [![Build Status](https://github.com/NuttidaLab/MARLAX/actions/workflows/ci.yml/badge.svg)](https://github.com/NuttidaLab/MARLAX/actions/workflows/ci.yml)
@@ -71,10 +72,13 @@ for idx, (Env, steps) in enumerate(zip(env_classes, regime_steps)):
 tracer.export_agents(env)
 ```
 ---
+
 ### 🧑‍🏫 Documentation
 
 For detailed documentation, please visit our ![Documentation Site](https://marlax.readthedocs.io).
+
 ---
+
 ### 🤝 Contributing
 
 Contributions are welcome! Please:
@@ -83,7 +87,9 @@ Contributions are welcome! Please:
 1. Write tests for new functionality.
 1. Ensure linters and formatters (black, flake8) pass (pre-commit hooks available).
 1. Submit a pull request describing your changes.
+
 ---
+
 ### 📖 Citation
 
 If you use MARLAX in your research, please cite:
@@ -92,6 +98,7 @@ If you use MARLAX in your research, please cite:
 @misc{(coming_soon)}
 ```
 ---
+
 ### 📝 License
 
 MARLAX is released under the MIT License. See `LICENSE` for details.
