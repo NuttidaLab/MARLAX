@@ -73,7 +73,7 @@ tracer.export_agents(env)
 ---
 ### 🧑‍🏫 Documentation
 
-For detailed documentation, please visit our [Documentation Site](https://marlax.readthedocs.io).
+For detailed documentation, please visit our ![Documentation Site](https://marlax.readthedocs.io).
 ---
 ### 🤝 Contributing
 
