@@ -72,7 +72,7 @@ class QAgent(Agent):
         """
         Update Q-value for the given state and action using the Q-learning update rule.
         
-        $Q(s, a) = Q(s, a) + \alpha * (r + \gamma * \max_a Q(s', a) - Q(s, a))$
+        $$Q(s, a) = Q(s, a) + \alpha * (r + \gamma * \max_a Q(s', a) - Q(s, a))$$
         
         Args:
             state_key: Current global state key.

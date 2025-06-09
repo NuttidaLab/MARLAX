@@ -22,20 +22,20 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinx_math_dollar',
     'sphinx.ext.mathjax',
-    'myst_parser',
     'myst_nb',
 ]
 
 source_suffix = {
     '.rst':  'restructuredtext',
-    '.md':   'markdown',
+    '.md':   'myst-nb',
     '.ipynb':'myst-nb',
 }
 
 templates_path = ['_templates']
 exclude_patterns = []
 
-
+html_title = "MARLAX"
+html_logo = "../../landing.gif"
 html_theme = 'sphinx_book_theme'
 html_theme_options = {
     'repository_url': 'https://github.com/NuttidaLab/MARLAX',
