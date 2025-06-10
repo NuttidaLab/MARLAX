@@ -11,3 +11,13 @@ A suite of multi-agent RL agents.
    marlax.agents.QValueAgent
    marlax.agents.DeepQAgent
    marlax.agents.IndependentAgent
+
+.. autoclass:: marlax.agents.QAgent
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+.. autoclass:: marlax.agents.QValueAgent
+   :members:
+   :undoc-members:
+   :show-inheritance:

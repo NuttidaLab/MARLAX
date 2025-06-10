@@ -15,6 +15,7 @@ Welcome to MARLAX!
    :target: https://nuttidalab.github.io/MARLAX/index.html
 .. image:: https://img.shields.io/badge/python-3.12-blue.svg
 
+------------
 
 Minimal, JAX-powered multi-agent reinforcement learning.
 
@@ -80,7 +81,7 @@ Quick Start
 Documentation
 -------------
 
-For detailed documentation, please visit our `Documentation Site <https://marlax.readthedocs.io>`_.
+For detailed documentation, please visit our `Documentation Site <https://nuttidalab.github.io/MARLAX/>`_.
 
 Contributing
 ------------
