@@ -12,7 +12,7 @@ Welcome to MARLAX!
 .. image:: https://img.shields.io/badge/Complete-documentation-blue.svg
    :target: https://nuttidalab.github.io/MARLAX/index.html
 .. image:: https://img.shields.io/badge/api-reference-blue.svg
-   :target: https://nuttidalab.github.io/MARLAX/index.html
+   :target: https://nuttidalab.github.io/MARLAX/genindex.html
 .. image:: https://img.shields.io/badge/python-3.12-blue.svg
 
 ------------
@@ -107,7 +107,6 @@ License
 
 MARLAX is released under the MIT License. See ``LICENSE`` for details.
 
-
 .. toctree::
    :maxdepth: 1
    :caption: 🚀 Tutorials:
@@ -128,5 +127,4 @@ Indices and tables
 ==================
 
 * :ref:`genindex`
-* :ref:`modindex`
 * :ref:`search`
