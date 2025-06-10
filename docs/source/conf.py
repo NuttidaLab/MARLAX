@@ -54,7 +54,6 @@ autodoc_default_options = {
     'members': True,
     'undoc-members': True,
     'show-inheritance': True,
-    'special-members': '__init__',
 }
 
 templates_path = ['_templates']

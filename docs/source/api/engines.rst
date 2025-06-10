@@ -1,10 +1,12 @@
-marlax.engines module
+Engines
 ======================
 
 The Engine class orchestrates training and testing loops for multi-agent RL.
 
-.. autosummary::
-   :toctree: .
-   :template: autosummary/class.rst
+.. currentmodule:: marlax.engines
 
-   marlax.engines.Engine
+.. autosummary::
+   :toctree: generated/
+   :nosignatures:
+
+   Engine

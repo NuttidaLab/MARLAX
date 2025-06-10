@@ -1,10 +1,12 @@
-marlax.utils module
+Utilities
 ====================
 
 Utility functions for visualizing and animating simulation runs.
 
-.. autosummary::
-   :toctree: .
-   :template: autosummary/function.rst
+.. currentmodule:: marlax.utils
 
-   marlax.utils.animate_simulation_by_df
+.. autosummary::
+   :toctree: generated/
+   :nosignatures:
+
+   animate_simulation_by_df

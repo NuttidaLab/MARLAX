@@ -1,5 +1,5 @@
-Agents package
-=====================
+Agents
+======
 
 A suite of multi-agent RL agents.
 
