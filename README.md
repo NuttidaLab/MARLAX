@@ -75,7 +75,7 @@ tracer.export_agents(env)
 
 ### 🧑‍🏫 Documentation
 
-For detailed documentation, please visit our ![Documentation Site](https://nuttidalab.github.io/MARLAX/).
+For detailed documentation, please visit our [official documentation](https://nuttidalab.github.io/MARLAX/index.html).
 
 ---
 
