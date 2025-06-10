@@ -1,13 +1,15 @@
-marlax.agents package
+Agents package
 =====================
 
 A suite of multi-agent RL agents.
 
-.. autosummary::
-   :toctree: .
-   :template: autosummary/class.rst
+.. currentmodule:: marlax.agents
 
-   marlax.agents.QAgent
-   marlax.agents.QValueAgent
-   marlax.agents.DeepQAgent
-   marlax.agents.IndependentAgent
+.. autosummary::
+   :toctree: generated/
+   :nosignatures:
+
+   QAgent
+   QValueAgent
+   DeepQAgent
+   IndependentAgent
