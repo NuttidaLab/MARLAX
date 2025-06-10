@@ -8,8 +8,3 @@ Utility functions for visualizing and animating simulation runs.
    :template: autosummary/function.rst
 
    marlax.utils.animate_simulation_by_df
-
-.. autofunction:: marlax.utils.animate_simulation_by_df
-   :noindex:
-   :noautoclass:
-   :show-inheritance:

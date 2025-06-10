@@ -8,8 +8,3 @@ The Tracer class buffers and writes out per-frame run data (Parquet, pickle expo
    :template: autosummary/class.rst
 
    marlax.tracers.Tracer
-
-.. autoclass:: marlax.tracers.Tracer
-   :members:
-   :undoc-members:
-   :show-inheritance:
