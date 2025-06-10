@@ -12,8 +12,3 @@ Grid-world environments for cooperative tasks.
    marlax.envs.GridWorld_r1
    marlax.envs.GridWorld_r2
    marlax.envs.GridWorld_r3
-
-.. autoclass:: marlax.envs.GridWorld
-   :members:
-   :undoc-members:
-   :show-inheritance:

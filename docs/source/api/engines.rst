@@ -8,8 +8,3 @@ The Engine class orchestrates training and testing loops for multi-agent RL.
    :template: autosummary/class.rst
 
    marlax.engines.Engine
-
-.. autoclass:: marlax.engines.Engine
-   :members:
-   :undoc-members:
-   :show-inheritance:

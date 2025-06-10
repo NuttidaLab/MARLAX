@@ -85,7 +85,13 @@ class QValueAgent(Agent):
         """
         Update the scalar Q-value for a state using a simple update rule.
 
-        $$Q(s) <- (1-alpha)*Q(s) + alpha*(reward + gamma*Q(s'))$$.
+        $$Q(s) <- (1-alpha)*Q(s) + alpha*(reward + gamma*Q(s'))$$
+        
+        where:
+        - $$Q(s)$$ is the current Q-value for the state,
+        - $$Q(s')$$ is the Q-value for the next state,
+        - $$alpha$$ is the learning rate,
+        - $$gamma$$ is the discount factor.
 
         Args:
             state_key (any): Current global state key.

@@ -100,7 +100,14 @@ class QAgent(Agent):
         Update the Q-table entry for a given state and action.
 
         Applies the Q-learning update rule:
-        $$Q(s,a) = Q(s,a) + alpha * (r + gamma * max_a Q(s',a) - Q(s,a))$$.
+        $$Q(s,a) = Q(s,a) + alpha * (r + gamma * max_a Q(s',a) - Q(s,a))$$
+        
+        where:
+        - $$s$$ is the current state,
+        - $$a$$ is the action taken,
+        - $$r$$ is the received reward,
+        - $$s'$$ is the next state,
+        - $$max_a Q(s',a)$$ is the maximum Q-value for the next state.
 
         Args:
             state_key (any): Current global state key.
